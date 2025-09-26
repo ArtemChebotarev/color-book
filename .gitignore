@@ -1,9 +1,13 @@
 # Rider / IntelliJ IDEA
 .idea/
 *.iml
+# Игнорировать все .idea в любых подпапках
+**/.idea/
+
 
 # VSCode
 .vscode/
+**/.vscode/
 
 # User-specific files
 *.user
