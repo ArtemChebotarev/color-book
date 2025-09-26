@@ -1,9 +1,9 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace ColorBook.Models;
+namespace ColorBook.Data.Models;
 
-public class BookItem
+public class LibraryBookItem
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
@@ -34,4 +34,3 @@ public class BookItem
     
     public bool IsCompleted => CompletedPages == TotalPages && TotalPages > 0;
 }
-

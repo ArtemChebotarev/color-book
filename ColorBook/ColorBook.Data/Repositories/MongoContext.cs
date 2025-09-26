@@ -1,13 +1,13 @@
+using ColorBook.Data.Config;
+using ColorBook.Data.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using ColorBook.Config;
-using ColorBook.Models;
 
-namespace ColorBook.Data;
+namespace ColorBook.Data.Repositories;
 
 public interface IMongoContext
 {
-    IMongoCollection<BookItem> Books { get; }
+    IMongoCollection<LibraryBookItem> Books { get; }
     IMongoDatabase Database { get; }
 }
 
@@ -21,7 +21,7 @@ public class MongoContext : IMongoContext
         _database = client.GetDatabase(settings.Value.DatabaseName);
     }
 
-    public IMongoCollection<BookItem> Books => _database.GetCollection<BookItem>("books");
+    public IMongoCollection<LibraryBookItem> Books => _database.GetCollection<LibraryBookItem>("books");
     
     public IMongoDatabase Database => _database;
 }

@@ -1,11 +1,11 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using ColorBook.Data;
-using ColorBook.Models;
+using ColorBook.Data.Models;
 using ColorBook.Validators;
 using ColorBook.Helpers;
 using System.Net;
+using ColorBook.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ColorBook.Functions;
@@ -55,7 +55,7 @@ public class BooksFunctions
     public async Task<HttpResponseData> CreateBook(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "books")] HttpRequestData req,
         [FromQuery] string userId,
-        [Microsoft.Azure.Functions.Worker.Http.FromBody] BookItem book)
+        [Microsoft.Azure.Functions.Worker.Http.FromBody] LibraryBookItem libraryBook)
     {
         if (string.IsNullOrEmpty(userId))
         {
@@ -66,16 +66,16 @@ public class BooksFunctions
 
         try
         {
-            var (isValid, errorMessage) = _bookValidator.Validate(book);
+            var (isValid, errorMessage) = _bookValidator.Validate(libraryBook);
             if (!isValid)
             {
                 return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.BadRequest, errorMessage!);
             }
 
-            book.UserId = userId;
-            book.Author ??= string.Empty;
+            libraryBook.UserId = userId;
+            libraryBook.Author ??= string.Empty;
 
-            var createdBook = await _bookRepository.CreateBookAsync(book);
+            var createdBook = await _bookRepository.CreateBookAsync(libraryBook);
             return await HttpResponseHelper.CreateJsonResponse(req, HttpStatusCode.Created, createdBook);
         }
         catch (Exception ex)

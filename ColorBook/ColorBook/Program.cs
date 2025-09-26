@@ -1,8 +1,8 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ColorBook.Config;
-using ColorBook.Data;
+using ColorBook.Data.Config;
+using ColorBook.Data.Repositories;
 using ColorBook.Middleware;
 using ColorBook.Validators;
 

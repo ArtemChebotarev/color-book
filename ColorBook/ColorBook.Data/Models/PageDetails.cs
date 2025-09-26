@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace ColorBook.Models;
+namespace ColorBook.Data.Models;
 
 public class PageDetails
 {

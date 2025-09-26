@@ -1,4 +1,4 @@
-namespace ColorBook.Config;
+namespace ColorBook.Data.Config;
 
 public class MongoSettings
 {

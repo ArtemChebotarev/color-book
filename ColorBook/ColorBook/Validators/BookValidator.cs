@@ -1,22 +1,22 @@
-using ColorBook.Models;
+using ColorBook.Data.Models;
 
 namespace ColorBook.Validators;
 
 public interface IBookValidator
 {
-    (bool IsValid, string? ErrorMessage) Validate(BookItem book);
+    (bool IsValid, string? ErrorMessage) Validate(LibraryBookItem libraryBook);
 }
 
 public class BookValidator : IBookValidator
 {
-    public (bool IsValid, string? ErrorMessage) Validate(BookItem book)
+    public (bool IsValid, string? ErrorMessage) Validate(LibraryBookItem libraryBook)
     {
-        if (string.IsNullOrWhiteSpace(book.Title))
+        if (string.IsNullOrWhiteSpace(libraryBook.Title))
         {
             return (false, "Title is required");
         }
 
-        if (book.TotalPages <= 0)
+        if (libraryBook.TotalPages <= 0)
         {
             return (false, "TotalPages must be greater than 0");
         }
@@ -24,4 +24,3 @@ public class BookValidator : IBookValidator
         return (true, null);
     }
 }
-
