@@ -6,7 +6,6 @@ using ColorBook.Validators;
 using ColorBook.Helpers;
 using System.Net;
 using ColorBook.Data.Repositories;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ColorBook.Functions;
 
@@ -28,9 +27,10 @@ public class BooksFunctions
     
     [Function("GetBooks")]
     public async Task<HttpResponseData> GetBooks(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "books")] HttpRequestData req,
-        [FromQuery] string userId)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "books")] HttpRequestData req)
     {
+        var userId = req.Query["userId"];
+        
         if (string.IsNullOrEmpty(userId))
         {
             return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.Unauthorized, "User not authenticated");
@@ -54,9 +54,10 @@ public class BooksFunctions
     [Function("CreateBook")]
     public async Task<HttpResponseData> CreateBook(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "books")] HttpRequestData req,
-        [FromQuery] string userId,
         [Microsoft.Azure.Functions.Worker.Http.FromBody] LibraryBookItem libraryBook)
     {
+        var userId = req.Query["userId"];
+        
         if (string.IsNullOrEmpty(userId))
         {
             return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.Unauthorized, "User not authenticated");

@@ -1,0 +1,132 @@
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Logging;
+using ColorBook.Data.Services;
+using ColorBook.Data.Models;
+using ColorBook.Helpers;
+using System.Net;
+using Microsoft.Azure.Functions.Worker.Http;
+
+namespace ColorBook.Functions;
+
+public class CatalogFunctions
+{
+    private readonly ICatalogService _catalogService;
+    private readonly ILogger<CatalogFunctions> _logger;
+
+    public CatalogFunctions(ICatalogService catalogService, ILogger<CatalogFunctions> logger)
+    {
+        _catalogService = catalogService;
+        _logger = logger;
+    }
+
+    [Function("SearchCatalog")]
+    public async Task<HttpResponseData> SearchCatalog(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "catalog/search")] HttpRequestData req)
+    {
+        _logger.LogInformation("Searching catalog");
+
+        try
+        {
+            var query = req.Query["query"] ?? "";
+            var category = req.Query["category"] ?? "";
+            var pageStr = req.Query["page"] ?? "1";
+            var pageSizeStr = req.Query["pageSize"] ?? "10";
+
+            if (!int.TryParse(pageStr, out var page) || page < 1)
+                page = 1;
+
+            if (!int.TryParse(pageSizeStr, out var pageSize) || pageSize < 1 || pageSize > 100)
+                pageSize = 10;
+
+            var (items, totalCount) = await _catalogService.SearchAsync(query, category, page, pageSize);
+
+            var response = new
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+            };
+
+            return await HttpResponseHelper.CreateJsonResponse(req, HttpStatusCode.OK, response);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while searching catalog");
+            return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.InternalServerError,
+                "An error occurred while searching the catalog");
+        }
+    }
+
+    [Function("GetCollections")]
+    public async Task<HttpResponseData> GetCollections(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "catalog/collections")] HttpRequestData req)
+    {
+        _logger.LogInformation("Getting all catalog collections");
+
+        try
+        {
+            var collections = await _catalogService.GetAllCollectionsAsync();
+
+            var response = collections.ToDictionary(
+                kvp => kvp.Key.ToString(),
+                kvp => kvp.Value
+            );
+
+            return await HttpResponseHelper.CreateJsonResponse(req, HttpStatusCode.OK, response);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while getting catalog collections");
+            return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.InternalServerError,
+                "An error occurred while retrieving catalog collections");
+        }
+    }
+
+    [Function("GetCollection")]
+    public async Task<HttpResponseData> GetCollection(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "catalog/collections/{collectionType}")] HttpRequestData req,
+        string collectionType)
+    {
+        _logger.LogInformation("Getting collection: {CollectionType}", collectionType);
+
+        try
+        {
+            if (!Enum.TryParse<CollectionType>(collectionType, true, out var collection))
+            {
+                return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.BadRequest,
+                    $"Invalid collection type: {collectionType}. Valid values are: {string.Join(", ", Enum.GetNames<CollectionType>())}");
+            }
+
+            var pageStr = req.Query["page"] ?? "1";
+            var pageSizeStr = req.Query["pageSize"] ?? "10";
+
+            if (!int.TryParse(pageStr, out var page) || page < 1)
+                page = 1;
+
+            if (!int.TryParse(pageSizeStr, out var pageSize) || pageSize < 1 || pageSize > 100)
+                pageSize = 10;
+
+            var (items, totalCount) = await _catalogService.GetCollectionAsync(collection, page, pageSize);
+
+            var response = new
+            {
+                CollectionType = collection.ToString(),
+                Items = items,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+            };
+
+            return await HttpResponseHelper.CreateJsonResponse(req, HttpStatusCode.OK, response);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while getting collection {CollectionType}", collectionType);
+            return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.InternalServerError,
+                "An error occurred while retrieving the collection");
+        }
+    }
+}

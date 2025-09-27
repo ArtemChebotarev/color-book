@@ -1,0 +1,323 @@
+[
+  {
+    "Asin": "B001A2B3C4",
+    "CoverImageUrl": "https://example.com/covers/magical-forest-adventures.jpg",
+    "Title": "Magical Forest Adventures",
+    "Authors": [
+      { "Name": "Emma Thompson", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Sarah Johnson", "Role": "illustrator" }
+    ],
+    "Publisher": "Rainbow Books",
+    "PublicationDate": "2023-03-15T00:00:00Z",
+    "TotalPages": 48,
+    "ShortDescription": "Join Luna the fairy as she explores enchanted forests filled with magical creatures and hidden treasures.",
+    "CustomerReviewStarRating": 4.8
+  },
+  {
+    "Asin": "B002D3E4F5",
+    "CoverImageUrl": "https://example.com/covers/underwater-kingdom.jpg",
+    "Title": "Underwater Kingdom Coloring Book",
+    "Authors": [
+      { "Name": "Michael Ocean", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Lisa Marine", "Role": "illustrator" }
+    ],
+    "Publisher": "Deep Sea Publishing",
+    "PublicationDate": "2023-05-20T00:00:00Z",
+    "TotalPages": 64,
+    "ShortDescription": "Dive into an underwater world with mermaids, dolphins, and coral reefs waiting to be colored.",
+    "CustomerReviewStarRating": 4.6
+  },
+  {
+    "Asin": "B003E4F5G6",
+    "CoverImageUrl": "https://example.com/covers/space-explorer.jpg",
+    "Title": "Space Explorer's Coloring Journey",
+    "Authors": [
+      { "Name": "Dr. Alex Cosmos", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Stella Rocket", "Role": "illustrator" }
+    ],
+    "Publisher": "Galaxy Arts",
+    "PublicationDate": "2023-07-10T00:00:00Z",
+    "TotalPages": 72,
+    "ShortDescription": "Blast off to distant planets and discover alien worlds in this cosmic coloring adventure.",
+    "CustomerReviewStarRating": 4.9
+  },
+  {
+    "Asin": "B004F5G6H7",
+    "CoverImageUrl": "https://example.com/covers/dinosaur-park.jpg",
+    "Title": "Dinosaur Park Adventures",
+    "Authors": [
+      { "Name": "Professor Rex Stone", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Dino Dave", "Role": "illustrator" }
+    ],
+    "Publisher": "Prehistoric Press",
+    "PublicationDate": "2023-02-28T00:00:00Z",
+    "TotalPages": 56,
+    "ShortDescription": "Travel back in time to meet friendly dinosaurs in their natural habitats.",
+    "CustomerReviewStarRating": 4.7
+  },
+  {
+    "Asin": "B005G6H7I8",
+    "CoverImageUrl": "https://example.com/covers/fairy-tale-castle.jpg",
+    "Title": "Fairy Tale Castle Coloring Book",
+    "Authors": [
+      { "Name": "Princess Aurora Writer", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Castle Artist", "Role": "illustrator" }
+    ],
+    "Publisher": "Enchanted Publications",
+    "PublicationDate": "2023-01-12T00:00:00Z",
+    "TotalPages": 60,
+    "ShortDescription": "Enter magical castles where princesses, knights, and dragons await your creative touch.",
+    "CustomerReviewStarRating": 4.5
+  },
+  {
+    "Asin": "B006H7I8J9",
+    "CoverImageUrl": "https://example.com/covers/animal-safari.jpg",
+    "Title": "Animal Safari Coloring Adventure",
+    "Authors": [
+      { "Name": "Safari Sam", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Wildlife Wendy", "Role": "illustrator" }
+    ],
+    "Publisher": "Nature Books Inc",
+    "PublicationDate": "2023-04-18T00:00:00Z",
+    "TotalPages": 52,
+    "ShortDescription": "Go on a wild safari and color exotic animals in their natural African habitats.",
+    "CustomerReviewStarRating": 4.4
+  },
+  {
+    "Asin": "B007I8J9K0",
+    "CoverImageUrl": "https://example.com/covers/pirate-treasure.jpg",
+    "Title": "Pirate Treasure Hunt Coloring Book",
+    "Authors": [
+      { "Name": "Captain Blackbeard Jr.", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Treasure Map Tom", "Role": "illustrator" }
+    ],
+    "Publisher": "Adventure Books Ltd",
+    "PublicationDate": "2023-06-05T00:00:00Z",
+    "TotalPages": 68,
+    "ShortDescription": "Ahoy matey! Join brave pirates on their quest for hidden treasure across the seven seas.",
+    "CustomerReviewStarRating": 4.3
+  },
+  {
+    "Asin": "B008J9K0L1",
+    "CoverImageUrl": "https://example.com/covers/butterfly-garden.jpg",
+    "Title": "Butterfly Garden Coloring Book",
+    "Authors": [
+      { "Name": "Garden Guru Grace", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Flutter Artist", "Role": "illustrator" }
+    ],
+    "Publisher": "Bloom Publishing",
+    "PublicationDate": "2023-08-22T00:00:00Z",
+    "TotalPages": 44,
+    "ShortDescription": "Flutter through beautiful gardens filled with colorful butterflies and blooming flowers.",
+    "CustomerReviewStarRating": 4.6
+  },
+  {
+    "Asin": "B009K0L1M2",
+    "CoverImageUrl": "https://example.com/covers/robot-city.jpg",
+    "Title": "Robot City Coloring Adventures",
+    "Authors": [
+      { "Name": "Robo Writer", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Mech Artist", "Role": "illustrator" }
+    ],
+    "Publisher": "Future Tech Books",
+    "PublicationDate": "2023-09-14T00:00:00Z",
+    "TotalPages": 76,
+    "ShortDescription": "Explore a futuristic city where friendly robots live, work, and play together.",
+    "CustomerReviewStarRating": 4.8
+  },
+  {
+    "Asin": "B010L1M2N3",
+    "CoverImageUrl": "https://example.com/covers/unicorn-rainbow.jpg",
+    "Title": "Unicorn Rainbow Coloring Magic",
+    "Authors": [
+      { "Name": "Sparkle Stevens", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Rainbow Rose", "Role": "illustrator" }
+    ],
+    "Publisher": "Magic Kingdom Books",
+    "PublicationDate": "2023-10-03T00:00:00Z",
+    "TotalPages": 50,
+    "ShortDescription": "Dance with unicorns through rainbow meadows in this magical coloring experience.",
+    "CustomerReviewStarRating": 4.9
+  },
+  {
+    "Asin": "B011M2N3O4",
+    "CoverImageUrl": "https://example.com/covers/jungle-explorer.jpg",
+    "Title": "Jungle Explorer Coloring Book",
+    "Authors": [
+      { "Name": "Amazon Annie", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Vine Artist", "Role": "illustrator" }
+    ],
+    "Publisher": "Tropical Tales",
+    "PublicationDate": "2023-03-08T00:00:00Z",
+    "TotalPages": 58,
+    "ShortDescription": "Swing through dense jungles and meet exotic animals hiding in the canopy.",
+    "CustomerReviewStarRating": 4.2
+  },
+  {
+    "Asin": "B012N3O4P5",
+    "CoverImageUrl": "https://example.com/covers/winter-wonderland.jpg",
+    "Title": "Winter Wonderland Coloring Fun",
+    "Authors": [
+      { "Name": "Snowy Sam", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Ice Artist Ida", "Role": "illustrator" }
+    ],
+    "Publisher": "Frosty Publications",
+    "PublicationDate": "2023-11-15T00:00:00Z",
+    "TotalPages": 62,
+    "ShortDescription": "Build snowmen and ice castles in this winter-themed coloring adventure.",
+    "CustomerReviewStarRating": 4.5
+  },
+  {
+    "Asin": "B013O4P5Q6",
+    "CoverImageUrl": "https://example.com/covers/circus-spectacular.jpg",
+    "Title": "Circus Spectacular Coloring Book",
+    "Authors": [
+      { "Name": "Ringmaster Rick", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Big Top Betty", "Role": "illustrator" }
+    ],
+    "Publisher": "Carnival Colors",
+    "PublicationDate": "2023-05-30T00:00:00Z",
+    "TotalPages": 66,
+    "ShortDescription": "Step right up to the greatest coloring show on earth with clowns, acrobats, and amazing animals.",
+    "CustomerReviewStarRating": 4.4
+  },
+  {
+    "Asin": "B014P5Q6R7",
+    "CoverImageUrl": "https://example.com/covers/superhero-academy.jpg",
+    "Title": "Superhero Academy Coloring Book",
+    "Authors": [
+      { "Name": "Captain Colorful", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Hero Artist", "Role": "illustrator" }
+    ],
+    "Publisher": "Super Publications",
+    "PublicationDate": "2023-07-25T00:00:00Z",
+    "TotalPages": 70,
+    "ShortDescription": "Train with young superheroes and learn about their amazing powers and adventures.",
+    "CustomerReviewStarRating": 4.7
+  },
+  {
+    "Asin": "B015Q6R7S8",
+    "CoverImageUrl": "https://example.com/covers/garden-gnomes.jpg",
+    "Title": "Garden Gnomes Coloring Adventures",
+    "Authors": [
+      { "Name": "Gnome Writer Gary", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Tiny Artist Tina", "Role": "illustrator" }
+    ],
+    "Publisher": "Miniature Magic Books",
+    "PublicationDate": "2023-04-12T00:00:00Z",
+    "TotalPages": 54,
+    "ShortDescription": "Discover the secret world of garden gnomes and their tiny magical adventures.",
+    "CustomerReviewStarRating": 4.1
+  },
+  {
+    "Asin": "B016R7S8T9",
+    "CoverImageUrl": "https://example.com/covers/racing-cars.jpg",
+    "Title": "Racing Cars Coloring Championship",
+    "Authors": [
+      { "Name": "Speed Racer Steve", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Fast Track Frank", "Role": "illustrator" }
+    ],
+    "Publisher": "Speedway Books",
+    "PublicationDate": "2023-08-07T00:00:00Z",
+    "TotalPages": 48,
+    "ShortDescription": "Rev your engines and race with the fastest cars on amazing racetracks around the world.",
+    "CustomerReviewStarRating": 4.3
+  },
+  {
+    "Asin": "B017S8T9U0",
+    "CoverImageUrl": "https://example.com/covers/pet-paradise.jpg",
+    "Title": "Pet Paradise Coloring Book",
+    "Authors": [
+      { "Name": "Pet Lover Penny", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Animal Artist Amy", "Role": "illustrator" }
+    ],
+    "Publisher": "Pet Care Publishing",
+    "PublicationDate": "2023-06-18T00:00:00Z",
+    "TotalPages": 56,
+    "ShortDescription": "Play with adorable puppies, kittens, and other cute pets in their perfect paradise.",
+    "CustomerReviewStarRating": 4.6
+  },
+  {
+    "Asin": "B018T9U0V1",
+    "CoverImageUrl": "https://example.com/covers/music-festival.jpg",
+    "Title": "Music Festival Coloring Celebration",
+    "Authors": [
+      { "Name": "Melody Maker Mike", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Harmony Artist Hannah", "Role": "illustrator" }
+    ],
+    "Publisher": "Musical Notes Press",
+    "PublicationDate": "2023-09-02T00:00:00Z",
+    "TotalPages": 64,
+    "ShortDescription": "Rock out at the most colorful music festival with dancing, singing, and musical instruments.",
+    "CustomerReviewStarRating": 4.5
+  },
+  {
+    "Asin": "B019U0V1W2",
+    "CoverImageUrl": "https://example.com/covers/time-machine.jpg",
+    "Title": "Time Machine Coloring Adventures",
+    "Authors": [
+      { "Name": "Time Traveler Tim", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "History Artist Helen", "Role": "illustrator" }
+    ],
+    "Publisher": "Past & Future Books",
+    "PublicationDate": "2023-10-20T00:00:00Z",
+    "TotalPages": 74,
+    "ShortDescription": "Travel through time and visit different eras from dinosaurs to space colonies.",
+    "CustomerReviewStarRating": 4.8
+  },
+  {
+    "Asin": "B020V1W2X3",
+    "CoverImageUrl": "https://example.com/covers/cooking-kitchen.jpg",
+    "Title": "Cooking Kitchen Coloring Fun",
+    "Authors": [
+      { "Name": "Chef Charlie", "Role": "author" }
+    ],
+    "Illustrators": [
+      { "Name": "Kitchen Artist Kate", "Role": "illustrator" }
+    ],
+    "Publisher": "Culinary Colors Inc",
+    "PublicationDate": "2023-11-08T00:00:00Z",
+    "TotalPages": 52,
+    "ShortDescription": "Cook up some fun in the kitchen with delicious recipes and tasty ingredients to color.",
+    "CustomerReviewStarRating": 4.4
+  }
+]
+

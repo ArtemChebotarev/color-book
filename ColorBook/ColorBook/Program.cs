@@ -5,6 +5,8 @@ using ColorBook.Data.Config;
 using ColorBook.Data.Repositories;
 using ColorBook.Middleware;
 using ColorBook.Validators;
+using ColorBook.Data.Providers;
+using ColorBook.Data.Services;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication(workerApplication =>
@@ -22,9 +24,17 @@ var host = new HostBuilder()
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
 
+        // Register memory cache
+        services.AddMemoryCache();
+
         // Register custom services
         services.AddSingleton<IMongoContext, MongoContext>();
         services.AddScoped<IBookRepository, BookRepository>();
+
+        // Register catalog services
+        services.AddScoped<ICatalogProvider, MockCatalogProvider>();
+        services.AddScoped<ICacheProvider, InMemoryCacheProvider>();
+        services.AddScoped<ICatalogService, CatalogService>();
 
         // Register validators
         services.AddScoped<IBookValidator, BookValidator>();
