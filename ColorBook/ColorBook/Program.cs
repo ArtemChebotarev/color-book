@@ -1,6 +1,7 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 using ColorBook.Data.Config;
 using ColorBook.Data.Repositories;
 using ColorBook.Middleware;
@@ -33,12 +34,29 @@ var host = new HostBuilder()
 
         // Register catalog services
         services.AddScoped<ICatalogProvider, MockCatalogProvider>();
-        services.AddScoped<ICacheProvider, InMemoryCacheProvider>();
+
+        // Register cache provider based on configuration
+        var useMongoCache = context.Configuration.GetValue<bool>("UseMongoCache", false);
+        if (useMongoCache)
+        {
+            services.AddScoped<ICacheProvider, MongoCacheProvider>();
+        }
+        else
+        {
+            services.AddScoped<ICacheProvider, InMemoryCacheProvider>();
+        }
+        
         services.AddScoped<ICatalogService, CatalogService>();
 
         // Register validators
         services.AddScoped<IBookValidator, BookValidator>();
     })
     .Build();
+
+using (var scope = host.Services.CreateScope())
+{
+    var mongoContext = scope.ServiceProvider.GetRequiredService<IMongoContext>();
+    await mongoContext.EnsureIndexesAsync();
+}
 
 host.Run();

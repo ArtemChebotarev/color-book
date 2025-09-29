@@ -19,7 +19,7 @@ public class WarmupFunctions
 
     [Function("WarmupCatalogCollections")]
     public async Task WarmupCatalogCollections(
-        [TimerTrigger("0 */5 * * * *")] MyTimerInfo timerInfo)
+        [TimerTrigger("0 */5 * * * *", RunOnStartup = true)] TimerInfo timerInfo)
     {
         _logger.LogInformation("Starting catalog collections warmup at {Time}", DateTime.UtcNow);
 
@@ -86,10 +86,4 @@ public class WarmupFunctions
             return response;
         }
     }
-}
-
-public class MyTimerInfo
-{
-    public DateTime ScheduleStatus { get; set; }
-    public bool IsPastDue { get; set; }
 }
