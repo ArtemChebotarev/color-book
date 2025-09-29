@@ -14,7 +14,7 @@ public class MockCatalogProvider : ICatalogProvider
         _dataFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "mock-catalog.json");
     }
 
-    public async Task<(List<CatalogBookItem> Items, int TotalCount)> SearchAsync(
+    public async Task<List<CatalogBookItem>> SearchAsync(
         string query, 
         string category, 
         int page, 
@@ -40,13 +40,53 @@ public class MockCatalogProvider : ICatalogProvider
                 b.Title.Contains(category, StringComparison.OrdinalIgnoreCase));
         }
         
-        var totalCount = filteredBooks.Count();
         var pagedBooks = filteredBooks
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToList();
             
-        return (pagedBooks, totalCount);
+        return pagedBooks;
+    }
+
+    public async Task<List<ShortCatalogBookItem>> SearchShortAsync(
+        string query, 
+        string category, 
+        int page, 
+        int pageSize)
+    {
+        var books = await GetBooksAsync();
+        
+        // Filter by query and category
+        var filteredBooks = books.AsEnumerable();
+        
+        if (!string.IsNullOrWhiteSpace(query))
+        {
+            filteredBooks = filteredBooks.Where(b => 
+                b.Title.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                b.Authors.Any(a => a.Name.Contains(query, StringComparison.OrdinalIgnoreCase)) ||
+                (b.ShortDescription?.Contains(query, StringComparison.OrdinalIgnoreCase) ?? false));
+        }
+        
+        if (!string.IsNullOrWhiteSpace(category) && category != "all")
+        {
+            // For mock purposes, we'll categorize based on title keywords
+            filteredBooks = filteredBooks.Where(b => 
+                b.Title.Contains(category, StringComparison.OrdinalIgnoreCase));
+        }
+        
+        var pagedBooks = filteredBooks
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(book => new ShortCatalogBookItem
+            {
+                Asin = book.Asin,
+                CoverImageUrl = book.CoverImageUrl,
+                Title = book.Title,
+                PublicationDate = book.PublicationDate
+            })
+            .ToList();
+            
+        return pagedBooks;
     }
 
     public async Task<CatalogBookItem?> GetDetailsAsync(string asin)

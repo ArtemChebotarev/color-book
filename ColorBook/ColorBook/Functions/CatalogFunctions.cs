@@ -38,15 +38,13 @@ public class CatalogFunctions
             if (!int.TryParse(pageSizeStr, out var pageSize) || pageSize < 1 || pageSize > 100)
                 pageSize = 10;
 
-            var (items, totalCount) = await _catalogService.SearchAsync(query, category, page, pageSize);
+            var items = await _catalogService.SearchAsync(query, category, page, pageSize);
 
             var response = new
             {
                 Items = items,
-                TotalCount = totalCount,
                 Page = page,
-                PageSize = pageSize,
-                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                PageSize = pageSize
             };
 
             return await HttpResponseHelper.CreateJsonResponse(req, HttpStatusCode.OK, response);
@@ -56,6 +54,39 @@ public class CatalogFunctions
             _logger.LogError(ex, "Error occurred while searching catalog");
             return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.InternalServerError,
                 "An error occurred while searching the catalog");
+        }
+    }
+
+    [Function("GetBookByAsin")]
+    public async Task<HttpResponseData> GetBookByAsin(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "catalog/books/{asin}")] HttpRequestData req,
+        string asin)
+    {
+        _logger.LogInformation("Getting book by ASIN: {Asin}", asin);
+
+        try
+        {
+            if (string.IsNullOrWhiteSpace(asin))
+            {
+                return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.BadRequest,
+                    "ASIN is required");
+            }
+
+            var book = await _catalogService.GetBookByAsin(asin);
+
+            if (book == null)
+            {
+                return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.NotFound,
+                    $"Book with ASIN '{asin}' not found");
+            }
+
+            return await HttpResponseHelper.CreateJsonResponse(req, HttpStatusCode.OK, book);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while getting book by ASIN {Asin}", asin);
+            return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.InternalServerError,
+                "An error occurred while retrieving the book");
         }
     }
 
@@ -108,16 +139,14 @@ public class CatalogFunctions
             if (!int.TryParse(pageSizeStr, out var pageSize) || pageSize < 1 || pageSize > 100)
                 pageSize = 10;
 
-            var (items, totalCount) = await _catalogService.GetCollectionAsync(collection, page, pageSize);
+            var items = await _catalogService.GetCollectionAsync(collection, page, pageSize);
 
             var response = new
             {
                 CollectionType = collection.ToString(),
                 Items = items,
-                TotalCount = totalCount,
                 Page = page,
-                PageSize = pageSize,
-                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                PageSize = pageSize
             };
 
             return await HttpResponseHelper.CreateJsonResponse(req, HttpStatusCode.OK, response);

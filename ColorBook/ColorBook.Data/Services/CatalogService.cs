@@ -17,14 +17,22 @@ public class CatalogService : ICatalogService
         _cacheProvider = cacheProvider;
     }
 
-    public async Task<(List<CatalogBookItem> Items, int TotalCount)> SearchAsync(
+    public async Task<List<ShortCatalogBookItem>> SearchAsync(
         string query, 
         string category, 
         int page, 
         int pageSize)
     {
-        // Always query the provider for live search
-        return await _catalogProvider.SearchAsync(query, category, page, pageSize);
+        // Use the new SearchShortAsync method that requests fewer fields from the data source
+        var items = await _catalogProvider.SearchShortAsync(query, category, page, pageSize);
+        
+        // Return the items directly without any filtering or conversion
+        return items;
+    }
+
+    public async Task<CatalogBookItem?> GetBookByAsin(string asin)
+    {
+        return await _catalogProvider.GetDetailsAsync(asin);
     }
 
     public async Task<Dictionary<CollectionType, List<CatalogBookItem>>> GetAllCollectionsAsync()
@@ -33,14 +41,14 @@ public class CatalogService : ICatalogService
         
         foreach (CollectionType collectionType in Enum.GetValues<CollectionType>())
         {
-            var (items, _) = await GetCollectionAsync(collectionType, 1, DefaultPageSize);
+            var items = await GetCollectionAsync(collectionType, 1, DefaultPageSize);
             collections[collectionType] = items;
         }
         
         return collections;
     }
 
-    public async Task<(List<CatalogBookItem> Items, int TotalCount)> GetCollectionAsync(
+    public async Task<List<CatalogBookItem>> GetCollectionAsync(
         CollectionType collectionType, 
         int page, 
         int pageSize)
@@ -53,7 +61,7 @@ public class CatalogService : ICatalogService
             
             if (cachedResult != null)
             {
-                return (cachedResult.Items, cachedResult.TotalCount);
+                return cachedResult.Items;
             }
         }
 
@@ -66,13 +74,12 @@ public class CatalogService : ICatalogService
             var cacheKey = $"collection_{collectionType}_{page}_{pageSize}";
             var cachedResult = new CachedCollectionResult
             {
-                Items = result.Items,
-                TotalCount = result.TotalCount
+                Items = result.Items
             };
             await _cacheProvider.SetAsync(cacheKey, cachedResult, CacheTtl);
         }
         
-        return result;
+        return result.Items;
     }
 
     private async Task<(List<CatalogBookItem> Items, int TotalCount)> GetCollectionFromProviderAsync(
@@ -80,27 +87,31 @@ public class CatalogService : ICatalogService
         int page, 
         int pageSize)
     {
-        // Get all books first, then apply collection-specific sorting and filtering
-        var (allBooks, totalCount) = await _catalogProvider.SearchAsync("", "", 1, int.MaxValue);
+        // TODO This filtration has to be on the Provider's Side.
+        // I can't pull all books from amazon. Those should be either 3 different requests.
+        var allBooks = await _catalogProvider.SearchAsync("", "", 1, int.MaxValue);
         
         var sortedBooks = collectionType switch
         {
             CollectionType.BestRated => allBooks
                 .Where(b => b.CustomerReviewStarRating.HasValue)
                 .OrderByDescending(b => b.CustomerReviewStarRating)
-                .ThenByDescending(b => b.PublicationDate),
+                .ThenByDescending(b => b.PublicationDate)
+                .ToList(),
             
             CollectionType.NewlyReleased => allBooks
                 .Where(b => b.PublicationDate.HasValue)
                 .OrderByDescending(b => b.PublicationDate)
-                .ThenByDescending(b => b.CustomerReviewStarRating ?? 0),
+                .ThenByDescending(b => b.CustomerReviewStarRating ?? 0)
+                .ToList(),
             
             CollectionType.MostColored => allBooks
                 .Where(b => b.TotalPages.HasValue)
                 .OrderByDescending(b => b.TotalPages)
-                .ThenByDescending(b => b.CustomerReviewStarRating ?? 0),
+                .ThenByDescending(b => b.CustomerReviewStarRating ?? 0)
+                .ToList(),
             
-            _ => allBooks.OrderBy(b => b.Title)
+            _ => allBooks.OrderBy(b => b.Title).ToList()
         };
 
         var collectionItems = sortedBooks
@@ -108,7 +119,7 @@ public class CatalogService : ICatalogService
             .Take(pageSize)
             .ToList();
 
-        var collectionTotalCount = sortedBooks.Count();
+        var collectionTotalCount = sortedBooks.Count;
         
         return (collectionItems, collectionTotalCount);
     }
@@ -133,5 +144,4 @@ public class CatalogService : ICatalogService
 public class CachedCollectionResult
 {
     public List<CatalogBookItem> Items { get; set; } = new();
-    public int TotalCount { get; set; }
 }
