@@ -32,4 +32,8 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Models\Catalog\" />
+    </ItemGroup>
+
 </Project>

@@ -9,13 +9,19 @@ public class LibraryBookItem
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; } = string.Empty;
     
+    public string Asin { get; set; } = string.Empty;
+    
     public string UserId { get; set; } = string.Empty;
     
     public string Title { get; set; } = string.Empty;
     
     public string Author { get; set; } = string.Empty;
     
-    public string? Description { get; set; }
+    public string Illustrator { get; set; } = string.Empty;
+    
+    public string Publisher { get; set; } = string.Empty;
+    
+    public string? ShortDescription { get; set; }
     
     public string? CoverImageUrl { get; set; }
     
@@ -24,6 +30,7 @@ public class LibraryBookItem
     public List<PageDetails> Pages { get; set; } = new();
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime PurchasedAt { get; set; }
     
     public DateTime? LastAccessedAt { get; set; }
     

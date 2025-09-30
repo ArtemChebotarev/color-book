@@ -6,18 +6,19 @@ using ColorBook.Validators;
 using ColorBook.Helpers;
 using System.Net;
 using ColorBook.Data.Repositories;
+using ColorBook.Models.Library;
 
 namespace ColorBook.Functions;
 
-public class BooksFunctions
+public class LibraryFunctions
 {
     private readonly IBookRepository _bookRepository;
-    private readonly ILogger<BooksFunctions> _logger;
+    private readonly ILogger<LibraryFunctions> _logger;
     private readonly IBookValidator _bookValidator;
 
-    public BooksFunctions(
+    public LibraryFunctions(
         IBookRepository bookRepository, 
-        ILogger<BooksFunctions> logger,
+        ILogger<LibraryFunctions> logger,
         IBookValidator bookValidator)
     {
         _bookRepository = bookRepository;
@@ -27,9 +28,10 @@ public class BooksFunctions
     
     [Function("GetBooks")]
     public async Task<HttpResponseData> GetBooks(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "books")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "library/books")] HttpRequestData req)
     {
         var userId = req.Query["userId"];
+        var sortOrder = req.Query["sort"];
         
         if (string.IsNullOrEmpty(userId))
         {
@@ -40,7 +42,11 @@ public class BooksFunctions
 
         try
         {
-            var books = await _bookRepository.GetUserBooksAsync(userId);
+            var parsedSortOrder = Enum.TryParse<BookSortOrder>(sortOrder, true, out var sort) 
+                ? sort 
+                : BookSortOrder.LastActive;
+                
+            var books = await _bookRepository.GetUserBooksShortAsync(userId, parsedSortOrder);
             return await HttpResponseHelper.CreateJsonResponse(req, HttpStatusCode.OK, books);
         }
         catch (Exception ex)
@@ -53,8 +59,8 @@ public class BooksFunctions
 
     [Function("CreateBook")]
     public async Task<HttpResponseData> CreateBook(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "books")] HttpRequestData req,
-        [Microsoft.Azure.Functions.Worker.Http.FromBody] LibraryBookItem libraryBook)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "library/books")] HttpRequestData req,
+        [FromBody] LibraryBookItemRequest libraryBookRequest)
     {
         var userId = req.Query["userId"];
         
@@ -67,14 +73,13 @@ public class BooksFunctions
 
         try
         {
+            var libraryBook = libraryBookRequest.ToLibraryBookItem(userId);
+            
             var (isValid, errorMessage) = _bookValidator.Validate(libraryBook);
             if (!isValid)
             {
                 return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.BadRequest, errorMessage!);
             }
-
-            libraryBook.UserId = userId;
-            libraryBook.Author ??= string.Empty;
 
             var createdBook = await _bookRepository.CreateBookAsync(libraryBook);
             return await HttpResponseHelper.CreateJsonResponse(req, HttpStatusCode.Created, createdBook);
@@ -84,6 +89,44 @@ public class BooksFunctions
             _logger.LogError(ex, "Error creating book for user {UserId}", userId);
             return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.InternalServerError, 
                 "An error occurred while creating the book");
+        }
+    }
+
+    [Function("GetBook")]
+    public async Task<HttpResponseData> GetBook(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "library/books/{bookId}")] HttpRequestData req,
+        string bookId)
+    {
+        var userId = req.Query["userId"];
+        
+        if (string.IsNullOrEmpty(userId))
+        {
+            return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.Unauthorized, "User not authenticated");
+        }
+
+        if (string.IsNullOrEmpty(bookId))
+        {
+            return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.BadRequest, "Book ID is required");
+        }
+
+        _logger.LogInformation("Getting book {BookId} for user {UserId}", bookId, userId);
+
+        try
+        {
+            var book = await _bookRepository.GetBookDetailsByIdAsync(bookId, userId);
+            
+            if (book == null)
+            {
+                return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.NotFound, "Book not found");
+            }
+
+            return await HttpResponseHelper.CreateJsonResponse(req, HttpStatusCode.OK, book);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting book {BookId} for user {UserId}", bookId, userId);
+            return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.InternalServerError, 
+                "An error occurred while retrieving the book");
         }
     }
 }

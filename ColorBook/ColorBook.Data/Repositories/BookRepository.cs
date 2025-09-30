@@ -7,7 +7,9 @@ namespace ColorBook.Data.Repositories;
 public interface IBookRepository
 {
     Task<List<LibraryBookItem>> GetUserBooksAsync(string userId);
+    Task<List<ShortLibraryBookItem>> GetUserBooksShortAsync(string userId, BookSortOrder sortOrder = BookSortOrder.LastActive);
     Task<LibraryBookItem?> GetBookByIdAsync(string bookId, string userId);
+    Task<DetailedLibraryBookItem?> GetBookDetailsByIdAsync(string bookId, string userId);
     Task<LibraryBookItem> CreateBookAsync(LibraryBookItem libraryBook);
     Task<LibraryBookItem?> UpdateBookAsync(LibraryBookItem libraryBook);
     Task<bool> DeleteBookAsync(string bookId, string userId);
@@ -29,7 +31,37 @@ public class BookRepository : IBookRepository
         var books = await _context.Books
             .Find(filter)
             .SortByDescending(b => b.LastAccessedAt)
-            .ThenByDescending(b => b.CreatedAt)
+            .ThenByDescending(b => b.PurchasedAt)
+            .ToListAsync();
+
+        return books;
+    }
+
+    public async Task<List<ShortLibraryBookItem>> GetUserBooksShortAsync(string userId, BookSortOrder sortOrder = BookSortOrder.LastActive)
+    {
+        var filter = Builders<LibraryBookItem>.Filter.Eq(b => b.UserId, userId);
+        
+        // Build sort definition based on sortOrder
+        SortDefinition<LibraryBookItem> sort = sortOrder switch
+        {
+            BookSortOrder.LastActive => Builders<LibraryBookItem>.Sort.Descending(b => b.LastAccessedAt).Descending(b => b.PurchasedAt),
+            BookSortOrder.RecentlyAdded => Builders<LibraryBookItem>.Sort.Descending(b => b.PurchasedAt),
+            BookSortOrder.AlphabeticalAz => Builders<LibraryBookItem>.Sort.Ascending(b => b.Title),
+            _ => Builders<LibraryBookItem>.Sort.Descending(b => b.LastAccessedAt)
+        };
+
+        var books = await _context.Books
+            .Find(filter)
+            .Sort(sort)
+            .Project(b => new ShortLibraryBookItem
+            {
+                Id = b.Id,
+                Title = b.Title,
+                CoverImageUrl = b.CoverImageUrl,
+                TotalPages = b.TotalPages,
+                CompletedPages = b.Pages.Count(p => p.Status == PageStatus.Completed),
+                LastAccessedAt = b.LastAccessedAt
+            })
             .ToListAsync();
 
         return books;
@@ -45,9 +77,38 @@ public class BookRepository : IBookRepository
         return await _context.Books.Find(filter).FirstOrDefaultAsync();
     }
 
+    public async Task<DetailedLibraryBookItem?> GetBookDetailsByIdAsync(string bookId, string userId)
+    {
+        var filter = Builders<LibraryBookItem>.Filter.And(
+            Builders<LibraryBookItem>.Filter.Eq(b => b.Id, bookId),
+            Builders<LibraryBookItem>.Filter.Eq(b => b.UserId, userId)
+        );
+
+        return await _context.Books
+            .Find(filter)
+            .Project(b => new DetailedLibraryBookItem
+            {
+                Id = b.Id,
+                Asin = b.Asin,
+                UserId = b.UserId,
+                Title = b.Title,
+                Author = b.Author,
+                Illustrator = b.Illustrator,
+                Publisher = b.Publisher,
+                ShortDescription = b.ShortDescription,
+                CoverImageUrl = b.CoverImageUrl,
+                TotalPages = b.TotalPages,
+                CompletedPages = b.Pages.Count(p => p.Status == PageStatus.Completed),
+                PurchasedAt = b.PurchasedAt,
+                ProgressPercentage = b.TotalPages > 0 ? (double)b.Pages.Count(p => p.Status == PageStatus.Completed) / b.TotalPages * 100 : 0
+                // Status is now computed automatically by the model
+            })
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<LibraryBookItem> CreateBookAsync(LibraryBookItem libraryBook)
     {
-        libraryBook.CreatedAt = DateTime.UtcNow;
+        libraryBook.PurchasedAt = DateTime.UtcNow;
         libraryBook.LastAccessedAt = DateTime.UtcNow;
         
         // Initialize pages if not already set
