@@ -95,6 +95,43 @@ public class MockCatalogProvider : ICatalogProvider
         return books.FirstOrDefault(b => b.Asin == asin);
     }
 
+    // ToDo when integtading with Amazon: call SeacrhAsync with category "best-rated", "newly-released", "most-colored"
+    public async Task<List<CatalogBookItem>> SearchCollectionAsync(
+        CollectionType collectionType,
+        int page,
+        int pageSize)
+    {
+        var books = await GetBooksAsync();
+        
+        var sortedBooks = collectionType switch
+        {
+            CollectionType.BestRated => books
+                .Where(b => b.CustomerReviewStarRating.HasValue)
+                .OrderByDescending(b => b.CustomerReviewStarRating)
+                .ThenByDescending(b => b.PublicationDate)
+                .ToList(),
+            
+            CollectionType.NewlyReleased => books
+                .Where(b => b.PublicationDate.HasValue)
+                .OrderByDescending(b => b.PublicationDate)
+                .ThenByDescending(b => b.CustomerReviewStarRating ?? 0)
+                .ToList(),
+            
+            CollectionType.MostColored => books
+                .Where(b => b.TotalPages.HasValue)
+                .OrderByDescending(b => b.TotalPages)
+                .ThenByDescending(b => b.CustomerReviewStarRating ?? 0)
+                .ToList(),
+            
+            _ => books.OrderBy(b => b.Title).ToList()
+        };
+
+        return sortedBooks
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+    }
+
     private async Task<List<CatalogBookItem>> GetBooksAsync()
     {
         if (_cachedBooks != null)

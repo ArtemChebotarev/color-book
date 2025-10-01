@@ -17,4 +17,9 @@ public interface ICatalogProvider
         int pageSize);
 
     Task<CatalogBookItem?> GetDetailsAsync(string asin);
+    
+    Task<List<CatalogBookItem>> SearchCollectionAsync(
+        CollectionType collectionType,
+        int page,
+        int pageSize);
 }

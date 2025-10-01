@@ -47,6 +47,7 @@ var host = new HostBuilder()
         }
         
         services.AddScoped<ICatalogService, CatalogService>();
+        services.AddScoped<ISearchService, SearchService>();
 
         // Register validators
         services.AddScoped<IBookValidator, BookValidator>();

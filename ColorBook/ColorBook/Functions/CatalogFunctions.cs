@@ -19,50 +19,12 @@ public class CatalogFunctions
         _logger = logger;
     }
 
-    [Function("SearchCatalog")]
-    public async Task<HttpResponseData> SearchCatalog(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "catalog/search")] HttpRequestData req)
-    {
-        _logger.LogInformation("Searching catalog");
-
-        try
-        {
-            var query = req.Query["query"] ?? "";
-            var category = req.Query["category"] ?? "";
-            var pageStr = req.Query["page"] ?? "1";
-            var pageSizeStr = req.Query["pageSize"] ?? "10";
-
-            if (!int.TryParse(pageStr, out var page) || page < 1)
-                page = 1;
-
-            if (!int.TryParse(pageSizeStr, out var pageSize) || pageSize < 1 || pageSize > 100)
-                pageSize = 10;
-
-            var items = await _catalogService.SearchAsync(query, category, page, pageSize);
-
-            var response = new
-            {
-                Items = items,
-                Page = page,
-                PageSize = pageSize
-            };
-
-            return await HttpResponseHelper.CreateJsonResponse(req, HttpStatusCode.OK, response);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error occurred while searching catalog");
-            return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.InternalServerError,
-                "An error occurred while searching the catalog");
-        }
-    }
-
-    [Function("GetBookByAsin")]
+    [Function("GetBookByAsinFromCatalog")]
     public async Task<HttpResponseData> GetBookByAsin(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "catalog/books/{asin}")] HttpRequestData req,
         string asin)
     {
-        _logger.LogInformation("Getting book by ASIN: {Asin}", asin);
+        _logger.LogInformation("Getting book by ASIN from catalog: {Asin}", asin);
 
         try
         {
@@ -98,7 +60,7 @@ public class CatalogFunctions
 
         try
         {
-            var collections = await _catalogService.GetAllCollectionsAsync();
+            var collections = await _catalogService.GetAllCollectionsShortAsync();
 
             var response = collections.ToDictionary(
                 kvp => kvp.Key.ToString(),
@@ -139,7 +101,7 @@ public class CatalogFunctions
             if (!int.TryParse(pageSizeStr, out var pageSize) || pageSize < 1 || pageSize > 100)
                 pageSize = 10;
 
-            var items = await _catalogService.GetCollectionAsync(collection, page, pageSize);
+            var items = await _catalogService.GetCollectionShortAsync(collection, page, pageSize);
 
             var response = new
             {

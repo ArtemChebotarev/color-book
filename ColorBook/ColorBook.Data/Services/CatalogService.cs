@@ -17,22 +17,27 @@ public class CatalogService : ICatalogService
         _cacheProvider = cacheProvider;
     }
 
-    public async Task<List<ShortCatalogBookItem>> SearchAsync(
-        string query, 
-        string category, 
-        int page, 
-        int pageSize)
-    {
-        // Use the new SearchShortAsync method that requests fewer fields from the data source
-        var items = await _catalogProvider.SearchShortAsync(query, category, page, pageSize);
-        
-        // Return the items directly without any filtering or conversion
-        return items;
-    }
-
     public async Task<CatalogBookItem?> GetBookByAsin(string asin)
     {
-        return await _catalogProvider.GetDetailsAsync(asin);
+        // First, try to get from book-specific cache
+        var bookCacheKey = $"book_{asin}";
+        var cachedBook = await _cacheProvider.GetAsync<CatalogBookItem>(bookCacheKey);
+
+        if (cachedBook != null)
+        {
+            return cachedBook;
+        }
+
+        // Fallback to provider
+        var book = await _catalogProvider.GetDetailsAsync(asin);
+
+        if (book != null)
+        {
+            // Cache the book for future lookups
+            await _cacheProvider.SetAsync(bookCacheKey, book, CacheTtl);
+        }
+
+        return book;
     }
 
     public async Task<Dictionary<CollectionType, List<CatalogBookItem>>> GetAllCollectionsAsync()
@@ -43,6 +48,27 @@ public class CatalogService : ICatalogService
         {
             var items = await GetCollectionAsync(collectionType, 1, DefaultPageSize);
             collections[collectionType] = items;
+        }
+        
+        return collections;
+    }
+
+    public async Task<Dictionary<CollectionType, List<ShortCatalogBookItem>>> GetAllCollectionsShortAsync()
+    {
+        var collections = new Dictionary<CollectionType, List<ShortCatalogBookItem>>();
+        
+        foreach (CollectionType collectionType in Enum.GetValues<CollectionType>())
+        {
+            var items = await GetCollectionAsync(collectionType, 1, DefaultPageSize);
+            var shortItems = items.Select(item => new ShortCatalogBookItem
+            {
+                Asin = item.Asin,
+                CoverImageUrl = item.CoverImageUrl,
+                Title = item.Title,
+                PublicationDate = item.PublicationDate
+            }).ToList();
+            
+            collections[collectionType] = shortItems;
         }
         
         return collections;
@@ -65,63 +91,32 @@ public class CatalogService : ICatalogService
             }
         }
 
-        // Fallback to provider
-        var result = await GetCollectionFromProviderAsync(collectionType, page, pageSize);
+        // Fallback to provider - now using provider's GetCollectionAsync method
+        var items = await _catalogProvider.SearchCollectionAsync(collectionType, page, pageSize);
         
         // Cache the result if it's within cached pages range
         if (page <= CachedPagesCount)
         {
-            var cacheKey = $"collection_{collectionType}_{page}_{pageSize}";
-            var cachedResult = new CachedCollectionResult
-            {
-                Items = result.Items
-            };
-            await _cacheProvider.SetAsync(cacheKey, cachedResult, CacheTtl);
+            await SetCollectionCacheAsync(collectionType, page, pageSize, items);
         }
         
-        return result.Items;
+        return items;
     }
-
-    private async Task<(List<CatalogBookItem> Items, int TotalCount)> GetCollectionFromProviderAsync(
+    
+    public async Task<List<ShortCatalogBookItem>> GetCollectionShortAsync(
         CollectionType collectionType, 
         int page, 
         int pageSize)
     {
-        // TODO This filtration has to be on the Provider's Side.
-        // I can't pull all books from amazon. Those should be either 3 different requests.
-        var allBooks = await _catalogProvider.SearchAsync("", "", 1, int.MaxValue);
+        var items = await GetCollectionAsync(collectionType, page, pageSize);
         
-        var sortedBooks = collectionType switch
+        return items.Select(item => new ShortCatalogBookItem
         {
-            CollectionType.BestRated => allBooks
-                .Where(b => b.CustomerReviewStarRating.HasValue)
-                .OrderByDescending(b => b.CustomerReviewStarRating)
-                .ThenByDescending(b => b.PublicationDate)
-                .ToList(),
-            
-            CollectionType.NewlyReleased => allBooks
-                .Where(b => b.PublicationDate.HasValue)
-                .OrderByDescending(b => b.PublicationDate)
-                .ThenByDescending(b => b.CustomerReviewStarRating ?? 0)
-                .ToList(),
-            
-            CollectionType.MostColored => allBooks
-                .Where(b => b.TotalPages.HasValue)
-                .OrderByDescending(b => b.TotalPages)
-                .ThenByDescending(b => b.CustomerReviewStarRating ?? 0)
-                .ToList(),
-            
-            _ => allBooks.OrderBy(b => b.Title).ToList()
-        };
-
-        var collectionItems = sortedBooks
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToList();
-
-        var collectionTotalCount = sortedBooks.Count;
-        
-        return (collectionItems, collectionTotalCount);
+            Asin = item.Asin,
+            CoverImageUrl = item.CoverImageUrl,
+            Title = item.Title,
+            PublicationDate = item.PublicationDate
+        }).ToList();
     }
 
     public async Task RefreshCachedCollectionsAsync()
@@ -137,6 +132,24 @@ public class CatalogService : ICatalogService
                 // Refresh cache
                 await GetCollectionAsync(collectionType, page, DefaultPageSize);
             }
+        }
+    }
+
+    private async Task SetCollectionCacheAsync(CollectionType collectionType, int page, int pageSize, List<CatalogBookItem> items)
+    {
+        var cacheKey = $"collection_{collectionType}_{page}_{pageSize}";
+        var cachedResult = new CachedCollectionResult
+        {
+            Items = items
+        };
+        
+        await _cacheProvider.SetAsync(cacheKey, cachedResult, CacheTtl);
+        
+        // Also cache individual books for GetBookByAsin performance
+        foreach (var book in items)
+        {
+            var bookCacheKey = $"book_{book.Asin}";
+            await _cacheProvider.SetAsync(bookCacheKey, book, CacheTtl);
         }
     }
 }
