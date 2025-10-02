@@ -32,13 +32,25 @@ public class LibraryFunctions
     {
         var userId = req.Query["userId"];
         var sortOrder = req.Query["sort"];
+        var pageParam = req.Query["page"];
+        var pageSizeParam = req.Query["pageSize"];
         
         if (string.IsNullOrEmpty(userId))
         {
             return await HttpResponseHelper.CreateErrorResponse(req, HttpStatusCode.Unauthorized, "User not authenticated");
         }
 
-        _logger.LogInformation("Getting books for user {UserId}", userId);
+        // Parse pagination parameters with defaults
+        if (!int.TryParse(pageParam, out var page) || page < 1)
+            page = 1;
+        
+        if (!int.TryParse(pageSizeParam, out var pageSize) || pageSize < 1)
+            pageSize = 10; // Default page size
+        
+        // Limit maximum page size
+        pageSize = Math.Min(pageSize, 100);
+
+        _logger.LogInformation("Getting books for user {UserId}, page {Page}, pageSize {PageSize}", userId, page, pageSize);
 
         try
         {
@@ -46,7 +58,7 @@ public class LibraryFunctions
                 ? sort 
                 : BookSortOrder.LastActive;
                 
-            var books = await _bookRepository.GetUserBooksShortAsync(userId, parsedSortOrder);
+            var books = await _bookRepository.GetUserBooksShortAsync(userId, parsedSortOrder, page, pageSize);
             return await HttpResponseHelper.CreateJsonResponse(req, HttpStatusCode.OK, books);
         }
         catch (Exception ex)

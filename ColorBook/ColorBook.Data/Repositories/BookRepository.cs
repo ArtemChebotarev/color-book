@@ -4,18 +4,6 @@ using MongoDB.Driver;
 
 namespace ColorBook.Data.Repositories;
 
-public interface IBookRepository
-{
-    Task<List<LibraryBookItem>> GetUserBooksAsync(string userId);
-    Task<List<ShortLibraryBookItem>> GetUserBooksShortAsync(string userId, BookSortOrder sortOrder = BookSortOrder.LastActive);
-    Task<LibraryBookItem?> GetBookByIdAsync(string bookId, string userId);
-    Task<DetailedLibraryBookItem?> GetBookDetailsByIdAsync(string bookId, string userId);
-    Task<LibraryBookItem> CreateBookAsync(LibraryBookItem libraryBook);
-    Task<LibraryBookItem?> UpdateBookAsync(LibraryBookItem libraryBook);
-    Task<bool> DeleteBookAsync(string bookId, string userId);
-    Task<bool> UpdatePageStatusAsync(string bookId, string userId, int pageNumber, PageStatus status);
-}
-
 public class BookRepository : IBookRepository
 {
     private readonly IMongoContext _context;
@@ -37,7 +25,7 @@ public class BookRepository : IBookRepository
         return books;
     }
 
-    public async Task<List<ShortLibraryBookItem>> GetUserBooksShortAsync(string userId, BookSortOrder sortOrder = BookSortOrder.LastActive)
+    public async Task<List<ShortLibraryBookItem>> GetUserBooksShortAsync(string userId, BookSortOrder sortOrder = BookSortOrder.LastActive, int page = 1, int pageSize = 20)
     {
         var filter = Builders<LibraryBookItem>.Filter.Eq(b => b.UserId, userId);
         
@@ -50,9 +38,13 @@ public class BookRepository : IBookRepository
             _ => Builders<LibraryBookItem>.Sort.Descending(b => b.LastAccessedAt)
         };
 
+        var skip = (page - 1) * pageSize;
+
         var books = await _context.Books
             .Find(filter)
             .Sort(sort)
+            .Skip(skip)
+            .Limit(pageSize)
             .Project(b => new ShortLibraryBookItem
             {
                 Id = b.Id,
