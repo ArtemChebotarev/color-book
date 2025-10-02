@@ -38,10 +38,3 @@ public class DetailedLibraryBookItem
                           CompletedPages == TotalPages ? nameof(BookStatus.Completed) :
                           nameof(BookStatus.InProgress);
 }
-
-public enum BookStatus
-{
-  NotStarted,
-  InProgress,
-  Completed
-}

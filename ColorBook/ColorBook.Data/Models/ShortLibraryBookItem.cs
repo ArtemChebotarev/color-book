@@ -18,6 +18,10 @@ public class ShortLibraryBookItem
     public int CompletedPages { get; set; }
     
     public DateTime? LastAccessedAt { get; set; }
+    
+    public string Status => CompletedPages == 0 ? nameof(BookStatus.NotStarted) :
+        CompletedPages == TotalPages ? nameof(BookStatus.Completed) :
+        nameof(BookStatus.InProgress);
 }
 
 public enum BookSortOrder

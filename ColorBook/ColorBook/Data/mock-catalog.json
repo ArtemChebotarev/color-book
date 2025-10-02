@@ -1,8 +1,8 @@
 [
   {
     "Asin": "B001A2B3C4",
-    "CoverImageUrl": "https://example.com/covers/magical-forest-adventures.jpg",
-    "Title": "Magical Forest Adventures",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81RQHuIg0ZL._SY385_.jpg",
+    "Title": "Coloriages mystères Disney - Portraits",
     "Authors": [
       { "Name": "Emma Thompson", "Role": "author" }
     ],
@@ -17,8 +17,8 @@
   },
   {
     "Asin": "B002D3E4F5",
-    "CoverImageUrl": "https://example.com/covers/underwater-kingdom.jpg",
-    "Title": "Underwater Kingdom Coloring Book",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81EqE1+IxzL._SY466_.jpg",
+    "Title": "Coloriages mystères Disney - Princesses",
     "Authors": [
       { "Name": "Michael Ocean", "Role": "author" }
     ],
@@ -33,8 +33,8 @@
   },
   {
     "Asin": "B003E4F5G6",
-    "CoverImageUrl": "https://example.com/covers/space-explorer.jpg",
-    "Title": "Space Explorer's Coloring Journey",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/810bisfeHvL._SY425_.jpg",
+    "Title": "Coloriages mystères Disney - Les Grands classiques Best of Miękka",
     "Authors": [
       { "Name": "Dr. Alex Cosmos", "Role": "author" }
     ],
@@ -49,8 +49,8 @@
   },
   {
     "Asin": "B004F5G6H7",
-    "CoverImageUrl": "https://example.com/covers/dinosaur-park.jpg",
-    "Title": "Dinosaur Park Adventures",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/816OVZU20cL._SY385_.jpg",
+    "Title": "Coloriages mystères Disney - Les Grands classiques Tome 11",
     "Authors": [
       { "Name": "Professor Rex Stone", "Role": "author" }
     ],
@@ -65,8 +65,8 @@
   },
   {
     "Asin": "B005G6H7I8",
-    "CoverImageUrl": "https://example.com/covers/fairy-tale-castle.jpg",
-    "Title": "Fairy Tale Castle Coloring Book",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81X4c80fDvL._SY342_.jpg",
+    "Title": "Coloriages mystères Disney - Famille",
     "Authors": [
       { "Name": "Princess Aurora Writer", "Role": "author" }
     ],
@@ -81,8 +81,8 @@
   },
   {
     "Asin": "B006H7I8J9",
-    "CoverImageUrl": "https://example.com/covers/animal-safari.jpg",
-    "Title": "Animal Safari Coloring Adventure",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81lpjslIBgL._SY385_.jpg",
+    "Title": "Coloriages mystères Disney - Les Grands classiques Tome 10",
     "Authors": [
       { "Name": "Safari Sam", "Role": "author" }
     ],
@@ -97,8 +97,8 @@
   },
   {
     "Asin": "B007I8J9K0",
-    "CoverImageUrl": "https://example.com/covers/pirate-treasure.jpg",
-    "Title": "Pirate Treasure Hunt Coloring Book",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81gX7wE7VmL._SY342_.jpg",
+    "Title": "Coloriages mystères Disney - Mickey and friends",
     "Authors": [
       { "Name": "Captain Blackbeard Jr.", "Role": "author" }
     ],
@@ -113,8 +113,8 @@
   },
   {
     "Asin": "B008J9K0L1",
-    "CoverImageUrl": "https://example.com/covers/butterfly-garden.jpg",
-    "Title": "Butterfly Garden Coloring Book",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81x1f-pAa7L._SY342_.jpg",
+    "Title": "Coloriages mystères - Schtroumpfs",
     "Authors": [
       { "Name": "Garden Guru Grace", "Role": "author" }
     ],
@@ -129,8 +129,8 @@
   },
   {
     "Asin": "B009K0L1M2",
-    "CoverImageUrl": "https://example.com/covers/robot-city.jpg",
-    "Title": "Robot City Coloring Adventures",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81Cue1jx1PL._SY342_.jpg",
+    "Title": "Coloriages mystères - L'Âge de glace",
     "Authors": [
       { "Name": "Robo Writer", "Role": "author" }
     ],
@@ -145,8 +145,8 @@
   },
   {
     "Asin": "B010L1M2N3",
-    "CoverImageUrl": "https://example.com/covers/unicorn-rainbow.jpg",
-    "Title": "Unicorn Rainbow Coloring Magic",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81CTi3dDyEL._SY342_.jpg",
+    "Title": "Coloriages mystères Disney - Best of Pixar",
     "Authors": [
       { "Name": "Sparkle Stevens", "Role": "author" }
     ],
@@ -161,8 +161,8 @@
   },
   {
     "Asin": "B011M2N3O4",
-    "CoverImageUrl": "https://example.com/covers/jungle-explorer.jpg",
-    "Title": "Jungle Explorer Coloring Book",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81H7mrePeML._SY342_.jpg",
+    "Title": "Coloriages mystères Disney - Princesses Tome 2",
     "Authors": [
       { "Name": "Amazon Annie", "Role": "author" }
     ],
@@ -177,8 +177,8 @@
   },
   {
     "Asin": "B012N3O4P5",
-    "CoverImageUrl": "https://example.com/covers/winter-wonderland.jpg",
-    "Title": "Winter Wonderland Coloring Fun",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81h6vnvKbZL._SY342_.jpg",
+    "Title": "Coloriages mystères - Scooby-Doo",
     "Authors": [
       { "Name": "Snowy Sam", "Role": "author" }
     ],
@@ -193,8 +193,8 @@
   },
   {
     "Asin": "B013O4P5Q6",
-    "CoverImageUrl": "https://example.com/covers/circus-spectacular.jpg",
-    "Title": "Circus Spectacular Coloring Book",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81nrKkvewHL._SY385_.jpg",
+    "Title": "Coloriages mystères - Looney Tunes T3: Tome 3",
     "Authors": [
       { "Name": "Ringmaster Rick", "Role": "author" }
     ],
@@ -209,8 +209,8 @@
   },
   {
     "Asin": "B014P5Q6R7",
-    "CoverImageUrl": "https://example.com/covers/superhero-academy.jpg",
-    "Title": "Superhero Academy Coloring Book",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81F6lFY9ZIL._SY342_.jpg",
+    "Title": "Coloriages mystères Disney - Vitraux",
     "Authors": [
       { "Name": "Captain Colorful", "Role": "author" }
     ],
@@ -225,8 +225,8 @@
   },
   {
     "Asin": "B015Q6R7S8",
-    "CoverImageUrl": "https://example.com/covers/garden-gnomes.jpg",
-    "Title": "Garden Gnomes Coloring Adventures",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81+6c1cL73L._SY342_.jpg",
+    "Title": "Coloriages mystères Spécial film - La Belle et la Bête: 50 coloriages mystères inédits",
     "Authors": [
       { "Name": "Gnome Writer Gary", "Role": "author" }
     ],
@@ -241,8 +241,8 @@
   },
   {
     "Asin": "B016R7S8T9",
-    "CoverImageUrl": "https://example.com/covers/racing-cars.jpg",
-    "Title": "Racing Cars Coloring Championship",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81W3DkvYFPL._SY342_.jpg",
+    "Title": "Coloriages mystères - Looney Tunes T2: Tome 2",
     "Authors": [
       { "Name": "Speed Racer Steve", "Role": "author" }
     ],
@@ -257,8 +257,8 @@
   },
   {
     "Asin": "B017S8T9U0",
-    "CoverImageUrl": "https://example.com/covers/pet-paradise.jpg",
-    "Title": "Pet Paradise Coloring Book",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81aKvNLVhSL._SY385_.jpg",
+    "Title": "Coloriages mystères Disney - Petites bêtes",
     "Authors": [
       { "Name": "Pet Lover Penny", "Role": "author" }
     ],
@@ -273,8 +273,8 @@
   },
   {
     "Asin": "B018T9U0V1",
-    "CoverImageUrl": "https://example.com/covers/music-festival.jpg",
-    "Title": "Music Festival Coloring Celebration",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81eleW8KZEL._SY342_.jpg",
+    "Title": "Coloriages mystères Disney - Spécial film",
     "Authors": [
       { "Name": "Melody Maker Mike", "Role": "author" }
     ],
@@ -289,8 +289,8 @@
   },
   {
     "Asin": "B019U0V1W2",
-    "CoverImageUrl": "https://example.com/covers/time-machine.jpg",
-    "Title": "Time Machine Coloring Adventures",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81hb71WJ6bL._SY342_.jpg",
+    "Title": "Coloriages mystères Disney - Chiots et chiens: Colorie les chiffres et découvre les images",
     "Authors": [
       { "Name": "Time Traveler Tim", "Role": "author" }
     ],
@@ -305,8 +305,8 @@
   },
   {
     "Asin": "B020V1W2X3",
-    "CoverImageUrl": "https://example.com/covers/cooking-kitchen.jpg",
-    "Title": "Cooking Kitchen Coloring Fun",
+    "CoverImageUrl": "https://m.media-amazon.com/images/I/81SZy8udGYL._SY342_.jpg",
+    "Title": "Coloriages mystères Disney - Chevaux",
     "Authors": [
       { "Name": "Chef Charlie", "Role": "author" }
     ],
